@@ -1,0 +1,1 @@
+# AWS-photo-recognition-app
