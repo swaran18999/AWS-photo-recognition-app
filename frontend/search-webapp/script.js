@@ -72,4 +72,47 @@ function uploadFiles(e) {
     fileInfo.style.display = 'none';
     dropArea.style.display = 'block';
     console.log(files);
+    var file = files[0];
+    getBase64(file).then((data) => {
+        console.log(data);
+        var apigClient = apigClientFactory.newClient();
+
+        var fileType = file.type + ';base64';
+        console.log(fileType)
+        var body = data;
+        var params = {
+            "key": file.name,
+            "bucket": "assignment3-b2-photos",
+            'x-amz-meta-customLabels': "qwerty",
+        };
+        apigClient
+            .uploadBucketKeyPut(params, body, {
+                'Access-Control-Allow-Origin': '*',
+            })
+            .then(function (res) {
+                if (res.status == 200) {
+                    console.log("Uploaded successfully")
+                    console.log(res)
+                }
+            }).catch((err) => {
+                console.log("Upload failed")
+                console.log(err)
+            }
+        );
+    });
+}
+
+function getBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            let encoded = reader.result.replace(/^data:(.*;base64,)?/, '');
+            if (encoded.length % 4 > 0) {
+                encoded += '='.repeat(4 - (encoded.length % 4));
+            }
+            resolve(encoded);
+        };
+        reader.onerror = (error) => reject(error);
+    });
 }
