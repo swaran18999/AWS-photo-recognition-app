@@ -76,3 +76,11 @@ h1, h2 {
     cursor: pointer;
     font-weight: 700;
 }
+#success {
+    display: none;
+    color: green;
+}
+#failure {
+    display: none;
+    color: red;
+}

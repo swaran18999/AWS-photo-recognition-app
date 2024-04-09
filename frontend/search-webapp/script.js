@@ -80,23 +80,28 @@ function uploadFiles(e) {
         var fileType = file.type + ';base64';
         console.log(fileType)
         var body = data;
+        var customLabels = document.getElementById("tags").value;
         var params = {
             "key": file.name,
-            "bucket": "assignment3-b2-photos",
-            'x-amz-meta-customLabels': "qwerty",
+            'x-amz-meta-customLabels': customLabels,
+            "bucket": "assignment3-b2-photos"
         };
+        console.log("Custom Labels:", customLabels);
         apigClient
             .uploadBucketKeyPut(params, body, {
                 'Access-Control-Allow-Origin': '*',
+                'x-amz-meta-customLabels': customLabels,
             })
             .then(function (res) {
                 if (res.status == 200) {
                     console.log("Uploaded successfully")
                     console.log(res)
+                    toggleText("success")
                 }
             }).catch((err) => {
                 console.log("Upload failed")
                 console.log(err)
+                toggleText("failure")
             }
         );
     });
@@ -115,4 +120,13 @@ function getBase64(file) {
         };
         reader.onerror = (error) => reject(error);
     });
+}
+
+
+function toggleText(text) {
+    var text = document.getElementById(text);
+    text.style.display = "block"; 
+    setTimeout(function(){
+      text.style.display = "none"; 
+    }, 5000); 
 }
