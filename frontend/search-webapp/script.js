@@ -133,6 +133,7 @@ function toggleText(text) {
 
 function searchFiles() {
     const searchValue = document.getElementById('search').value;
+    document.getElementById('img-container').innerHTML = "";
     console.log(searchValue);
     var apigClient = apigClientFactory.newClient();
     var params = {
@@ -148,7 +149,26 @@ function searchFiles() {
                 console.log(res)
                 var images = res["data"]["images"]
                 images.forEach(image=>{
-                    console.log('https://s3.amazonaws.com/' + image);
+                    var url = 'https://s3.amazonaws.com/' + image;
+                    fetch(url, { mode: 'cors', method: "GET"}).then(resp=>{
+                        console.log(url);
+                        console.log(resp);
+                        if(resp.ok) {
+                            return resp.text();
+                        }
+                        console.log("---------------------")
+                    }, err=> {
+                        console.log("Error", url, err)
+                    }). then(base64Data=>{
+                        base64Data = JSON.parse(base64Data)["body-json"]
+                        console.log(base64Data)
+                        
+                        const img = new Image();
+                        img.src = `data:image/jpeg;base64,${base64Data}`;
+                        img.setAttribute('class', 'banner-img');
+                
+                        document.getElementById('img-container').appendChild(img);
+                    }) 
                 })
             }
         }).catch((err) => {
