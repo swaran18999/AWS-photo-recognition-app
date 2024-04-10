@@ -82,7 +82,7 @@ function uploadFiles(e) {
         var body = data;
         var customLabels = document.getElementById("tags").value;
         var params = {
-            "key": file.name,
+            "key": Date.now().toString() + file.name,
             'x-amz-meta-customLabels': customLabels,
             "bucket": "assignment3-b2-photos"
         };
@@ -129,4 +129,31 @@ function toggleText(text) {
     setTimeout(function(){
       text.style.display = "none"; 
     }, 5000); 
+}
+
+function searchFiles() {
+    const searchValue = document.getElementById('search').value;
+    console.log(searchValue);
+    var apigClient = apigClientFactory.newClient();
+    var params = {
+        "q": searchValue
+    };
+    apigClient
+        .searchGet(params, {}, {
+            'Access-Control-Allow-Origin': '*'
+        })
+        .then(function (res) {
+            if (res.status == 200) {
+                console.log("Search successfully")
+                console.log(res)
+                var images = res["data"]["images"]
+                images.forEach(image=>{
+                    console.log('https://s3.amazonaws.com/' + image);
+                })
+            }
+        }).catch((err) => {
+            console.log("Search failed")
+            console.log(err)
+        }
+    );
 }
