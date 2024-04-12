@@ -80,6 +80,8 @@ def lambda_handler(event, context):
     
     print(es_response)
     
+    # Testing the code pipeline
+
     # TODO implement
     return {
         'headers': {
