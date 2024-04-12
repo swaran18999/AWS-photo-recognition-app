@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+
+  pre_build:
+    commands:
+      - echo "lambda-buildspec has been called"
+
+  build:
+    commands:
+      - ls
+      - echo "LF1"
+      - cd lambda/LF1
+      - zip -r ../LF1.zip *
+      - aws s3 cp ../LF1.zip s3://assignment3-lambda-codepipeline
+      - echo "LF2"
+      - cd ../LF2
+      - zip -r ../LF2.zip *
+      - aws s3 cp ../LF2.zip s3://assignment3-lambda-codepipeline
+      - echo "Both LF done"
+
+  post_build:
+    commands:
+      - echo "Starting update-function-code"
+      - aws lambda update-function-code --function-name assingment3-LF1-index-photos --s3-bucket assignment3-lambda-codepipeline --s3-key LF1.zip
+      - aws lambda update-function-code --function-name assingment3-LF2-search-photos --s3-bucket assignment3-lambda-codepipeline --s3-key LF2.zip
