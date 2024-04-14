@@ -7,6 +7,12 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: "assignment2-b1-frontend-cf"
+      AccessControl: PublicRead
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
 
   PhotosBucket:
     Type: AWS::S3::Bucket
