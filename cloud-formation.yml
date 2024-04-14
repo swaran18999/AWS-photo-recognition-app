@@ -7,7 +7,6 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: "assignment2-b1-frontend-cf"
-      AccessControl: PublicRead
       PublicAccessBlockConfiguration:
         BlockPublicAcls: false
         BlockPublicPolicy: false
@@ -18,6 +17,11 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: "assignment3-b2-photos-cf"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
 
   # IAM Role for Lambda Functions
   LambdaExecutionRole:
