@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Photo Album Web Application Infrastructure
 
 Resources:
-  S3 Bucket
+  # S3 Bucket
   FrontendBucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -188,7 +188,10 @@ Resources:
       HttpMethod: PUT
       AuthorizationType: NONE
       Integration:
-        Type: MOCK
+        Type: AWS
+        Uri: arn:aws:apigateway:us-east-1:s3:path/{bucket}/{key}
+        IntegrationHttpMethod: PUT
+        Credentials: arn:aws:iam::767397968615:role/service-role/assingment3-LF1-index-photos-role-lwvbof8w
         RequestTemplates:
           application/json: '{"statusCode": 200}'
         IntegrationResponses:
